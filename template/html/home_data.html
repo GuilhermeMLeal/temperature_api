@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/template/style/style_home.css">
+</head>
+<body>
+    <div>
+        <div id="imgs_login">
+            <img src="https://cdn-icons-png.flaticon.com/512/310/310818.png" alt="" width="50px">
+            <a href="index.html"><img src="https://cdn.icon-icons.com/icons2/1769/PNG/512/4115234-login-sign-in_114046.png" alt="" width="50px"></a>
+        </div>
+        <div id="forms_previsao">
+            <h2>Previsão do Tempo</h2>
+            <form>
+                <h2>Criar Nova Previsão</h2>
+                <label for="cidade">Cidade:</label><br>
+                <input type="text" id="cidade" name="cidade"><br>
+                <label for="temperatura">Temperatura (°C):</label><br>
+                <input type="number" id="temperatura" name="temperatura"><br>
+                <label for="pressao">Pressão Atmosférica (hPa):</label><br>
+                <input type="number" id="pressao" name="pressao"><br>
+                <label for="umidade">Umidade (%):</label><br>
+                <input type="number" id="umidade" name="umidade"><br>
+                <label for="precipitacao">Precipitação (mm):</label><br>
+                <input type="number" id="precipitacao" name="precipitacao"><br>
+                <label for="condicao">Condição do Tempo:</label><br>
+                <input type="text" id="condicao" name="condicao"><br><br>
+                <input type="submit" value="Criar">
+            </form>
+        </div>
+        <div id="table_container">
+            <table id="weatherTable">
+                <tr>
+                    <th>Cidade</th>
+                    <th>Temperatura (°C)</th>
+                    <th>Pressão Atmosférica (hPa)</th>
+                    <th>Umidade (%)</th>
+                    <th>Precipitação (mm)</th>
+                    <th>Condição do Tempo</th>
+                    <th>Opções</th>
+                </tr>
+                <tr>
+                    <td>São Paulo</td>
+                    <td>25</td>
+                    <td>1015</td>
+                    <td>70</td>
+                    <td>0</td>
+                    <td>Ensolarado</td>
+                    <td>
+                        <button>Editar</button>
+                        <button>Excluir</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
