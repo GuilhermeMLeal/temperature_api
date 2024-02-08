@@ -4,25 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Criação previsão do tempo</title>
-    <link rel="stylesheet" href="/template/style/style_home.css" />
+    <link rel="stylesheet" href="/template/style/style_create.css" />
   </head>
   <body>
     <div id="forms_previsao">
-      <h2>Crie aqui sua previsão e insira seus dados:</h2>
+      <h2>Insira seus dados de previsão:</h2>
 
       <form>
-        <label for="cidade">Cidade:</label><br />
-        <input type="text" id="cidade" name="cidade" /><br />
-        <label for="temperatura">Temperatura (°C):</label><br />
-        <input type="number" id="temperatura" name="temperatura" /><br />
-        <label for="pressao">Pressão Atmosférica (hPa):</label><br />
-        <input type="number" id="pressao" name="pressao" /><br />
-        <label for="umidade">Umidade (%):</label><br />
-        <input type="number" id="umidade" name="umidade" /><br />
-        <label for="precipitacao">Precipitação (mm):</label><br />
-        <input type="number" id="precipitacao" name="precipitacao" /><br />
-        <label for="condicao">Condição do Tempo:</label><br />
-        <input type="text" id="condicao" name="condicao" /><br /><br />
+        <input type="text" id="cidade" name="cidade" placeholder="Cidade" />
+        <input
+          type="number"
+          id="temperatura"
+          name="temperatura"
+          placeholder="Temperatura (°C):"
+        />
+        <input
+          type="number"
+          id="pressao"
+          name="pressao"
+          placeholder="Pressão Atmosférica (hPa)"
+        />
+        <input type="number" id="umidade" name="umidade" placeholder="Umidade (%)" />
+        <input type="number" id="precipitacao" name="precipitacao" placeholder="Precipitação (mm)" />
+        <input type="text" id="condicao" name="condicao" placeholder="Condição do Tempo" />
         <a href="home_data.html"
           ><input type="button" value="Criar nova previsão!"
         /></a>

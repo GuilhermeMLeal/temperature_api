@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="/template/style/style_home.css" />
   </head>
   <body>
-    <div>
+    <div id="estrutura">
       <div id="imgs_login">
-        <a href="create_user.html"
+        <a href="edit_user.html"
           ><img
             src="https://cdn-icons-png.flaticon.com/512/310/310818.png"
             alt=""
@@ -22,75 +22,73 @@
             width="50px"
         /></a>
       </div>
-      <div>
-        <div>
-          <a href="create_previsao.html"><h3>CRIE AQUI SUA PREVISÃO</h3></a>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/32/32339.png"
-            alt=""
-            width="30px"
-          />
+      <div id="middle">
+        <div id="opcoes">
+          <select>
+            <option value="" disabled selected hidden>Cidade</option>
+            <option value="cidade1">Cidade 1</option>
+            <option value="cidade2">Cidade 2</option>
+            <option value="cidade3">Cidade 3</option>
+          </select>
+
+          <select id="uf">
+            <option value="" disabled selected hidden>UF</option>
+            <option value="uf1">UF 1</option>
+            <option value="uf2">UF 2</option>
+            <option value="uf3">UF 3</option>
+          </select>
+
+          <select id="dia">
+            <option value="" disabled selected hidden>Selecione o dia</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <!-- Adicione mais opções de dia conforme necessário -->
+          </select>
+
+          <select id="mes">
+            <option value="" disabled selected hidden>Mês</option>
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <!-- Adicione mais opções de mês conforme necessário -->
+          </select>
+
+          <select id="ano">
+            <option value="" disabled selected hidden>Ano</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <!-- Adicione mais opções de ano conforme necessário -->
+          </select>
         </div>
-        <label for="cidade">Cidade:</label>
-        <select id="cidade">
-          <option value="cidade1">Cidade 1</option>
-          <option value="cidade2">Cidade 2</option>
-          <option value="cidade3">Cidade 3</option>
-        </select>
-
-        <label for="uf">UF:</label>
-        <select id="uf">
-          <option value="uf1">UF 1</option>
-          <option value="uf2">UF 2</option>
-          <option value="uf3">UF 3</option>
-        </select>
-
-        <label for="dia">Dia:</label>
-        <select id="dia">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <!-- Adicione mais opções de dia conforme necessário -->
-        </select>
-
-        <label for="mes">Mês:</label>
-        <select id="mes">
-          <option value="1">Janeiro</option>
-          <option value="2">Fevereiro</option>
-          <!-- Adicione mais opções de mês conforme necessário -->
-        </select>
-
-        <label for="ano">Ano:</label>
-        <select id="ano">
-          <option value="2022">2022</option>
-          <option value="2023">2023</option>
-          <!-- Adicione mais opções de ano conforme necessário -->
-        </select>
-        <h2>Crie aqui sua previsão e insira seus dados:</h2>
-      </div>
-      <div id="table_container">
-        <table id="weatherTable">
-          <tr>
-            <th>Cidade</th>
-            <th>Temperatura (°C)</th>
-            <th>Pressão Atmosférica (hPa)</th>
-            <th>Umidade (%)</th>
-            <th>Precipitação (mm)</th>
-            <th>Condição do Tempo</th>
-            <th>Opções</th>
-          </tr>
-          <tr>
-            <td>São Paulo</td>
-            <td>25</td>
-            <td>1015</td>
-            <td>70</td>
-            <td>0</td>
-            <td>Ensolarado</td>
-            <td>
-              <button>Editar</button>
-              <button>Excluir</button>
-            </td>
-          </tr>
-        </table>
+        <div id="table_container">
+          <table id="weatherTable">
+            <tr>
+              <th>Cidade</th>
+              <th>Temperatura (°C)</th>
+              <th>Pressão Atmosférica (hPa)</th>
+              <th>Umidade (%)</th>
+              <th>Precipitação (mm)</th>
+              <th>Condição do Tempo</th>
+              <th>Opções</th>
+            </tr>
+            <tr>
+              <td>São Paulo</td>
+              <td>25</td>
+              <td>1015</td>
+              <td>70</td>
+              <td>0</td>
+              <td>Ensolarado</td>
+              <td>
+                <button>Editar</button>
+                <button>Excluir</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <a href="create_previsao.html"
+          ><div id="criar_temperatura">
+            <h3>CRIE AQUI SUA PREVISÃO</h3>
+          </div></a
+        >
       </div>
     </div>
   </body>

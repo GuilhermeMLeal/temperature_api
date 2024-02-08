@@ -6,18 +6,14 @@ body {
   background-image: url("https://conceito.de/wp-content/uploads/2022/10/mountain-1462655_1280.jpg");
 }
 
-.container {
+#forms_previsao {
   max-width: 400px;
   margin: 100px auto;
   text-align: center;
-  background-color: #dfdeded7;
+  background-color: #dfdcdcb0; /* Cor de fundo qualquer */
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-  color: #000000;
 }
 
 h2 {
@@ -25,24 +21,30 @@ h2 {
 }
 
 input[type="text"],
-input[type="password"],
-input[type="submit"] {
-  width: 100%;
+input[type="number"] {
+  width: calc(
+    100% - 20px
+  ); /* Leva em consideração o padding de 10px em cada lado */
   padding: 10px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
+  margin-bottom: 20px; /* Adiciona espaço entre os inputs */
+  border: 1px solid #000000;
   border-radius: 3px;
   box-sizing: border-box;
 }
 
-input[type="submit"] {
-  background-color: #506646;
-  color: white;
+input[type="button"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #52e75a;
+  color: rgb(55, 55, 55);
   cursor: pointer;
+  border: none;
+  border-radius: 3px;
 }
 
-input[type="submit"]:hover {
-  background-color: #245827;
+input[type="button"]:hover {
+  background-color: #36a70d;
+  color: #000000;
 }
 
 a {
