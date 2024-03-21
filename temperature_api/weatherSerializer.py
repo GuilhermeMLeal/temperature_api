@@ -1,12 +1,13 @@
 from rest_framework import serializers
 from temperature_api.models.weather_model import WeatherEntity 
 
+
 class WeatherSerializer(serializers.Serializer):
-    temperature = serializers.IntegerField()
-    city = serializers.CharField(required=False)
-    atmosphericPressure = serializers.CharField(required=False)
-    humidity = serializers.CharField(required=False)
-    weather = serializers.CharField(required=False)
+    temperature = serializers.FloatField()
+    city = serializers.CharField(max_length=100, allow_blank=True)
+    atmosphericPressure = serializers.CharField(max_length=100, allow_blank=True)
+    humidity = serializers.CharField(max_length=100, allow_blank=True)
+    weather = serializers.CharField(max_length=100, allow_blank=True)
     date = serializers.DateTimeField()
 
     def create(self, validated_data):
