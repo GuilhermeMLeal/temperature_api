@@ -1,36 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Criação previsão do tempo</title>
-    <link rel="stylesheet" href="/template/style/style_create.css" />
-  </head>
-  <body>
-    <div id="forms_previsao">
-      <h2>Insira seus dados de previsão:</h2>
-
-      <form>
-        <input type="text" id="cidade" name="cidade" placeholder="Cidade" />
-        <input
-          type="number"
-          id="temperatura"
-          name="temperatura"
-          placeholder="Temperatura (°C):"
-        />
-        <input
-          type="number"
-          id="pressao"
-          name="pressao"
-          placeholder="Pressão Atmosférica (hPa)"
-        />
-        <input type="number" id="umidade" name="umidade" placeholder="Umidade (%)" />
-        <input type="number" id="precipitacao" name="precipitacao" placeholder="Precipitação (mm)" />
-        <input type="text" id="condicao" name="condicao" placeholder="Condição do Tempo" />
-        <a href="home_data.html"
-          ><input type="button" value="Criar nova previsão!"
-        /></a>
-      </form>
-    </div>
-  </body>
+<html>
+<head>
+    <title>Enviar Dados Meteorológicos</title>
+</head>
+<body>
+    <h1>Enviar Dados Meteorológicos</h1>
+    <form method="post" action="{% url 'weather_submit' %}">
+        {% csrf_token %}
+        <label for="temperature">Temperatura:</label>
+        <input type="text" id="temperature" name="temperature"><br><br>
+        <label for="city">Cidade:</label>
+        <input type="text" id="city" name="city"><br><br>
+        <label for="atmosphericPressure">Pressão Atmosférica:</label>
+        <input type="text" id="atmosphericPressure" name="atmosphericPressure"><br><br>
+        <label for="humidity">Umidade:</label>
+        <input type="text" id="humidity" name="humidity"><br><br>
+        <label for="weather">Clima:</label>
+        <input type="text" id="weather" name="weather"><br><br>
+        <label for="date">Data:</label>
+        <input type="datetime-local" id="date" name="date"><br><br>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
 </html>
