@@ -25,7 +25,8 @@ from django.urls import path
 from temperature_api.views.weather_view import WeatherView, WeatherGenerate, WeatherReset
 
 urlpatterns = [
-    path('api', WeatherView.as_view(), name='Weather View'),
-    path('api/', WeatherGenerate.as_view(), name='Weather Generate'),
-    path('api/', WeatherReset.as_view(), name='Weather Reset'),
+    path('api/', WeatherView.as_view(), name='Weather View'),
+    path('api/generate/', WeatherGenerate.as_view(), name='Weather Generate'),
+    path('api/reset/', WeatherReset.as_view(), name='Weather Reset'),
+    
 ]
