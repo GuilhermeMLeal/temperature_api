@@ -1,94 +1,110 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="/template/style/style_home.css" />
+    <title>Weather Data</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}" />
   </head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #fff;
+    }
+
+    table th,
+    table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    table th {
+      background-color: #f2f2f2;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    table tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
+      text-transform: uppercase;
+      margin-top: 20px; /* Adiciona margem acima do botão */
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    .create {
+      padding-top: 100px;
+    }
+  </style>
   <body>
-    <div id="estrutura">
-      <div id="imgs_login">
-        <a href="edit_user.html"
-          ><img
-            src="https://cdn-icons-png.flaticon.com/512/310/310818.png"
-            alt=""
-            width="50px"
-        /></a>
-        <a href="index.html"
-          ><img
-            src="https://cdn.icon-icons.com/icons2/1769/PNG/512/4115234-login-sign-in_114046.png"
-            alt=""
-            width="50px"
-        /></a>
-      </div>
-      <div id="middle">
-        <div id="opcoes">
-          <select>
-            <option value="" disabled selected hidden>Cidade</option>
-            <option value="cidade1">Cidade 1</option>
-            <option value="cidade2">Cidade 2</option>
-            <option value="cidade3">Cidade 3</option>
-          </select>
+    <div class="container">
+      <h1>Weather Data</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Temperature</th>
+            <th>City</th>
+            <th>Atmospheric Pressure</th>
+            <th>Humidity</th>
+            <th>Weather</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for weather in weathers %}
+          <tr>
+            <td>{{ weather.temperature }}</td>
+            <td>{{ weather.city }}</td>
+            <td>{{ weather.atmosphericPressure }}</td>
+            <td>{{ weather.humidity }}</td>
+            <td>{{ weather.weather }}</td>
+            <td>{{ weather.date }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-          <select id="uf">
-            <option value="" disabled selected hidden>UF</option>
-            <option value="uf1">UF 1</option>
-            <option value="uf2">UF 2</option>
-            <option value="uf3">UF 3</option>
-          </select>
-
-          <select id="dia">
-            <option value="" disabled selected hidden>Selecione o dia</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <!-- Adicione mais opções de dia conforme necessário -->
-          </select>
-
-          <select id="mes">
-            <option value="" disabled selected hidden>Mês</option>
-            <option value="1">Janeiro</option>
-            <option value="2">Fevereiro</option>
-            <!-- Adicione mais opções de mês conforme necessário -->
-          </select>
-
-          <select id="ano">
-            <option value="" disabled selected hidden>Ano</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-            <!-- Adicione mais opções de ano conforme necessário -->
-          </select>
-        </div>
-        <div id="table_container">
-          <table id="weatherTable">
-            <tr>
-              <th>Cidade</th>
-              <th>Temperatura (°C)</th>
-              <th>Pressão Atmosférica (hPa)</th>
-              <th>Umidade (%)</th>
-              <th>Precipitação (mm)</th>
-              <th>Condição do Tempo</th>
-              <th>Opções</th>
-            </tr>
-            <tr>
-              <td>São Paulo</td>
-              <td>25</td>
-              <td>1015</td>
-              <td>70</td>
-              <td>0</td>
-              <td>Ensolarado</td>
-              <td>
-                <button>Editar</button>
-                <button>Excluir</button>
-              </td>
-            </tr>
-          </table>
-        </div>
+      <div id="create">
         <a href="create_previsao.html"
-          ><div id="criar_temperatura">
-            <h3>CRIE AQUI SUA PREVISÃO</h3>
-          </div></a
-        >
+          ><input type="submit" value="CRIAR UMA PREVISÃO"
+        /></a>
       </div>
     </div>
   </body>
