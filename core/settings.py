@@ -78,16 +78,16 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.dummy',
         
     }
 }
-"""
 
-MONGO_CONNECTION_STRING = 'mongodb://localhost:27017/'
+
+MONGO_CONNECTION_STRING = 'mongodb://localhost:27017'
 MONGO_DATABASE_NAME = 'weather_api'
 
 
