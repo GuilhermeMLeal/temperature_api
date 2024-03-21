@@ -53,7 +53,8 @@
       background-color: #f1f1f1;
     }
 
-    input[type="submit"] {
+    /* Estilo para o botão */
+    button[type="submit"] {
       padding: 10px 20px;
       background-color: #007bff;
       color: #fff;
@@ -65,12 +66,8 @@
       margin-top: 20px; /* Adiciona margem acima do botão */
     }
 
-    input[type="submit"]:hover {
+    button[type="submit"]:hover {
       background-color: #0056b3;
-    }
-
-    .create {
-      padding-top: 100px;
     }
   </style>
   <body>
@@ -102,9 +99,9 @@
       </table>
 
       <div id="create">
-        <a href="create_previsao.html"
-          ><input type="submit" value="CRIAR UMA PREVISÃO"
-        /></a>
+        <form action="{% url 'Weather Generate' %}" method="GET">
+          <button type="submit">CRIAR UMA PREVISÃO</button>
+        </form>
       </div>
     </div>
   </body>
