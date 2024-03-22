@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from temperature_api.models.weather_model import WeatherEntity
 from temperature_api.repositories import WeatherRepository
 from temperature_api.weatherSerializer import WeatherSerializer
-from temperature_api.WeatherForm import WeatherEntityForm
+from temperature_api.WeatherForm import WeatherForm
 
 
 class WeatherView(View):
@@ -43,4 +43,23 @@ class WeatherReset(View):
         repository.deleteAll()
 
         return redirect('Weather View')
-        
+    
+class WeatherInsert(View):
+    def get(self, request):
+        weatherForm = WeatherForm()
+
+        return render(request, "create_previsao.html", {"form":weatherForm})
+    
+    def post(self, request):
+        weatherForm = WeatherForm(request.POST)
+        if weatherForm.is_valid():
+            serializer = WeatherSerializer(data=weatherForm.data)
+            if (serializer.is_valid()):
+                repository = WeatherRepository(collectionName='weathers')
+                repository.insert(serializer.data)
+            else:
+                print(serializer.errors)
+        else:
+            print(weatherForm.errors)
+
+        return redirect('Weather View')
