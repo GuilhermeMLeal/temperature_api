@@ -9,9 +9,13 @@ class WeatherRepository:
         self.collection = collectionName
 
     def getConnection(self):
+        
         stringConnection = getattr(settings, "MONGO_CONNECTION_STRING")
         database = getattr(settings, "MONGO_DATABASE_NAME")
-        client = pymongo.MongoClient(stringConnection)
+        try:
+            client = pymongo.MongoClient(stringConnection)
+        except:
+            raise("Error in database connection")
         connection = client[database]
         return connection
 
