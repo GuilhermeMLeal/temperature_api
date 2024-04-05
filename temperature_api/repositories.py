@@ -1,5 +1,6 @@
 from django.conf import settings
 import pymongo
+from bson import ObjectId
 
 class WeatherRepository:
 
@@ -32,14 +33,24 @@ class WeatherRepository:
         return document
 
     def getAll(self):
-        collection = self.getCollection()
-        documents = collection.find({})
+        documents = []
+        for document in self.getCollection().find({}):
+            id = document.pop('_id')
+            document['id'] = str(id)
+            documents.append(document)
         return documents
 
-    def getByAttribute(self, attribute, value):
-        collection = self.getCollection()
-        documents = collection.find({attribute: value})
-        return documents
+    
+    def getByID(self, id):
+        document = self.getColletion().find_one({"_id": ObjectId(id)})
+        id = document.pop('_id')
+        document['id'] = str(id)
+        return document
+    
+
+    def update(self, document, id):
+        self.getColletion().update_one({"_id": ObjectId(id)}, document)
+          
 
     def insert(self, document) -> None:
         collection = self.getCollection()
