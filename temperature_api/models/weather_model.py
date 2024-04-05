@@ -3,9 +3,10 @@ from django.db import models
 
 class WeatherEntity:
 
-    def __init__(self, temperature=0, date='',
+    def __init__(self, _id='', temperature=0, date='',
                  city='', atmosphericPressure=0,
                  humidity=0, weather='') -> None:
+        self._id = _id
         self.temperature = temperature
         self.city = city
         self.atmosphericPressure = atmosphericPressure
@@ -15,6 +16,7 @@ class WeatherEntity:
 
     def __str__(self) -> str:
         return (f"Weather <{self.temperature}>")
+
     
     def __getattribute__(self, __name: str) :
         if (__name=='date'):
