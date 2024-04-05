@@ -87,12 +87,15 @@
         <tbody>
           {% for weather in weathers %}
           <tr>
-            <td>{{ weather.temperature }}</td>
-            <td>{{ weather.city }}</td>
-            <td>{{ weather.atmosphericPressure }}</td>
-            <td>{{ weather.humidity }}</td>
-            <td>{{ weather.weather }}</td>
-            <td>{{ weather.date }}</td>
+              <td>{{ weather.temperature }}</td>
+              <td>{{ weather.city }}</td>
+              <td>{{ weather.atmosphericPressure }}</td>
+              <td>{{ weather.humidity }}</td>
+              <td>{{ weather.weather }}</td>
+              <td>{{ weather.date }}</td>
+              <td><a href="{% url 'Weather Edit' id=weather.id %}">Editar</a></td>
+
+              <td><a href="{% url 'Weather Remove' id=weather.id %}">Remover</a></td>
           </tr>
           {% endfor %}
         </tbody>
