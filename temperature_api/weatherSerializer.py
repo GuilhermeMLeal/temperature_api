@@ -3,6 +3,7 @@ from temperature_api.models.weather_model import WeatherEntity
 
 
 class WeatherSerializer(serializers.Serializer):
+    _id = serializers.CharField(allow_blank = True, required = False)
     temperature = serializers.FloatField()
     date = serializers.DateTimeField()
     city = serializers.CharField(max_length=255, allow_blank=True)
