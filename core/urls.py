@@ -22,12 +22,13 @@ from rest_framework.routers import DefaultRouter
 
 
 from django.urls import path
-from temperature_api.views.weather_view import WeatherView, WeatherGenerate, WeatherReset,WeatherInsert
+from temperature_api.views.weather_view import WeatherView, WeatherGenerate, WeatherReset,WeatherInsert, WeatherEdit
 
 urlpatterns = [
     path('api/', WeatherView.as_view(), name='Weather View'),
     path('api/insert/', WeatherInsert.as_view(), name='Weather Insert'),
     path('api/generate/', WeatherGenerate.as_view(), name='Weather Generate'),
     path('api/reset/', WeatherReset.as_view(), name='Weather Reset'),
+    path('api/update/<id>', WeatherEdit.as_view(), name ='Weather Edit' )
     
 ]
