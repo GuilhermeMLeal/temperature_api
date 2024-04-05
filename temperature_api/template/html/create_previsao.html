@@ -1,36 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Criação previsão do tempo</title>
-    <link rel="stylesheet" href="/template/style/style_create.css" />
-  </head>
-  <body>
-    <div id="forms_previsao">
-      <h2>Insira seus dados de previsão:</h2>
+{% extends "main.html" %}
 
-      <form>
-        <input type="text" id="cidade" name="cidade" placeholder="Cidade" />
-        <input
-          type="number"
-          id="temperatura"
-          name="temperatura"
-          placeholder="Temperatura (°C):"
-        />
-        <input
-          type="number"
-          id="pressao"
-          name="pressao"
-          placeholder="Pressão Atmosférica (hPa)"
-        />
-        <input type="number" id="umidade" name="umidade" placeholder="Umidade (%)" />
-        <input type="number" id="precipitacao" name="precipitacao" placeholder="Precipitação (mm)" />
-        <input type="text" id="condicao" name="condicao" placeholder="Condição do Tempo" />
-        <a href="home_data.html"
-          ><input type="button" value="Criar nova previsão!"
-        /></a>
-      </form>
+{% block verse%}
+{{ verse }}
+{% endblock %}
+
+{% block content %}
+
+    <h1>Insert Climate Data</h1>
+
+    <div class="d-flex justify-content-start flex-wrap">
+
+        <form action="{% url 'Weather Insert' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="col-md-12 p-2">
+                <div class="card">
+                    <div class="card-body">
+                        {% for field in form %}
+                        <p class="card-text">   
+                        {{ field.label }}: {{ field }}
+                        </p>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer">
+                        <input type="submit" value="Save">
+                    </div>
+                </div>
+            </div>
+        </form>
+
     </div>
-  </body>
-</html>
+{% endblock content %}
