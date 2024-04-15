@@ -20,47 +20,47 @@ class WeatherRepository:
         connection = client[database]
         return connection
 
-    def getCollection(self):
-        connection = self.getConnection()
-        collection = connection[self.collection]
+    def __get_collection(self):
+        conn = self.__get_connection()
+        collection = conn[self.collection]
         return collection
+    
+    #CRUD
 
-    # CRUD
-
-    def getById(self, documentId):
-        collection = self.getCollection()
-        document = collection.find_one({"_id": documentId})
-        return document
-
-    def getAll(self):
+    def list(self):
         documents = []
-        for document in self.getCollection().find({}):
-            id = document.pop('_id')
-            document['id'] = str(id)
-            documents.append(document)
+        for doc in self.__get_collection().find({}):
+            id = doc.pop('_id')
+            doc['id'] = str(id)
+            documents.append(doc)
         return documents
-
     
-    def getByID(self, id):
-        document = self.getColletion().find_one({"_id": ObjectId(id)})
-        id = document.pop('_id')
-        document['id'] = str(id)
+    def getById(self, document_id):
+        document = self.__get_collection().find({"_id": ObjectId(document_id)})
         return document
-    
+        
+    def filterByAttribute(self, attribute, value):
+        if attribute in ('id', '_id'):
+            return self.getById(value)
 
-    def update(self, document, id):
-        self.getColletion().update_one({"_id": ObjectId(id)}, document)
-          
+        if attribute in ('temperature', 'atmospheric_pressure', 'humidity', 'precipitation_percentage'):
+            value = float(value) 
 
+        documents = self.__get_collection().find({attribute: value})
+        return list(documents)
+        
     def insert(self, document) -> None:
-        collection = self.getCollection()
-        collection.insert_one(document)
+        self.__get_collection().insert_one(document)
 
-    def delete(self, documentId) -> None:
-        collection = self.getCollection()
-        collection.delete_one({"_id": documentId})
-
+    def update(self, document_id, update_data):
+        self.__get_collection().update_one(
+            {"_id": ObjectId(document_id)},
+            {"$set": update_data}
+        )
+        return self.getById(document_id)
+    
+    def delete(self, document_id) -> None:
+        self.__get_collection().delete_one({"_id": ObjectId(document_id)})
+ 
     def deleteAll(self) -> None:
-        collection = self.getCollection()
-        collection.delete_many({})
-
+        self.__get_collection().delete_many({})

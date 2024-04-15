@@ -3,16 +3,15 @@ from django.db import models
 
 class WeatherEntity:
 
-    def __init__(self, _id='', temperature=0, date='',
-                 city='', atmosphericPressure=0,
-                 humidity=0, weather='') -> None:
-        self._id = _id
+    def __init__(self, temperature, date_time='', atmospheric_pressure='', humidity='', precipitation_percentage='', weather_conditions='',city_name="Sorocaba", id='' ) -> None:
+        self.id = id
+        self.city_name = city_name
         self.temperature = temperature
-        self.city = city
-        self.atmosphericPressure = atmosphericPressure
+        self.atmospheric_pressure = atmospheric_pressure
         self.humidity = humidity
-        self.weather = weather
-        self.date = date
+        self.precipitation_percentage = precipitation_percentage
+        self.weather_conditions = weather_conditions
+        self.date_time = date_time
 
     def __str__(self) -> str:
         return (f"Weather <{self.temperature}>")

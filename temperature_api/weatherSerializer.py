@@ -3,14 +3,14 @@ from temperature_api.models.weather_model import WeatherEntity
 
 
 class WeatherSerializer(serializers.Serializer):
-    _id = serializers.CharField(allow_blank = True, required = False)
+    id = serializers.CharField(allow_blank=True, required=False)
+    city_name = serializers.CharField(required=False, allow_blank=True)
     temperature = serializers.FloatField()
-    date = serializers.DateTimeField()
-    city = serializers.CharField(max_length=255, allow_blank=True)
-    atmosphericPressure = serializers.FloatField(required=False)
+    atmospheric_pressure = serializers.FloatField(required=False)
     humidity = serializers.FloatField(required=False)
-    weather = serializers.CharField(max_length=255, allow_blank=True)
-
+    precipitation_percentage = serializers.FloatField(required=False)
+    weather_conditions = serializers.CharField(required=False, allow_blank=True)
+    date_time = serializers.DateTimeField(required=False)
 
     def create(self, validated_data):
         return WeatherEntity(**validated_data)
