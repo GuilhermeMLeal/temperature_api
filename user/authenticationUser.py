@@ -1,5 +1,4 @@
-
-from .models import UserEntity
+from .userModel import UserEntity
 import jwt
 from django.conf import settings
 from datetime import datetime, timedelta
