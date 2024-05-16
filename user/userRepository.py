@@ -2,7 +2,7 @@ import pymongo
 from pymongo.errors import ConnectionFailure
 from bson import ObjectId
 from django.conf import settings
-from .exception import UserException
+from .userException import UserException
 
 class UserRepository:
 
