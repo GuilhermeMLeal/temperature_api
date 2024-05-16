@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt',
     'rest_framework',
-    'temperature_api'
+    'temperature_api',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +60,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'temperature_api', 'template', 'html')],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,8 +89,8 @@ DATABASES = {
 }
 
 
-MONGO_CONNECTION_STRING = 'mongodb://localhost:27017'
-MONGO_DATABASE_NAME = 'weather_api'
+MONGO_CONNECTION_STRING = 'mongodb://10.109.2.63:443/'
+MONGO_DATABASE_NAME = 'weather_andresouza'
 
 
 # Password validation
