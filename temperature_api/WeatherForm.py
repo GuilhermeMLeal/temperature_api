@@ -2,7 +2,6 @@ from typing import Any, Mapping
 from django import forms
 from django.forms.renderers import BaseRenderer
 from django.forms.utils import ErrorList
-from models import WeatherEntity
 
 class WeatherForm(forms.Form):
     temperature = forms.FloatField()
