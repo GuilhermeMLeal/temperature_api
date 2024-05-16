@@ -3,7 +3,7 @@ import pymongo
 from pymongo.errors import ConnectionFailure
 from bson import ObjectId
 from django.conf import settings
-from .exceptionsTemperature import WeatherException
+from .weatherExceptions import WeatherException
 
 class WeatherRepository:
 
