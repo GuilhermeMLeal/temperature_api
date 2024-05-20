@@ -95,20 +95,22 @@
               <td>{{ weather.date }}</td>
               <td><a href="{% url 'Weather Edit' id=weather.id %}">Editar</a></td>
 
-              <td><a href="{% url 'Weather Remove' id=weather.id %}">Remover</a></td>
+              <td><a href="{% url 'Weather Delete' id=weather.id %}">Remover</a></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
 
       <div id="create">
-        <form action="{% url 'Weather Generate' %}" method="GET">
+        <form action="{% url 'Weather Insert' %}" method="GET">
           <button type="submit">CRIAR UMA PREVISÃO</button>
         </form>
         <form action="{% url 'Weather Reset' %}" method="DELETE">
           <button type="submit">RESETE AS PREVISÕES</button>
         </form>
-        <a href="{% url 'User Edit' %}">Editar Usuário</a>
+        <a href="{% url 'User Edit' user_id=user_id %}">Editar Usuário</a>
+
+
       </div>
     </div>
   </body>
