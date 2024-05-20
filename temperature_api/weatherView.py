@@ -1,5 +1,5 @@
 from typing import Any
-from bible_verse import main
+from django.utils import timezone
 from datetime import datetime
 from random import randrange
 from django.http import HttpRequest
@@ -14,7 +14,6 @@ from .weatherForm import WeatherForm
 from .weatherExceptions import WeatherException
 
 class WeatherView(View):
-
     def dispatch(self, request, *args, **kwargs):
         if 'token' in request.session:
             token = request.session['token']
@@ -22,35 +21,29 @@ class WeatherView(View):
             if error_code == 0:
                 user = getAuthenticatedUser(token)
                 if user:
-                    request.authenticate = True  # Configura o estado de autenticação
+                    request.authenticate = True
+                    request.user_id = user.id  # Adicione o id do usuário à requisição
                     return super().dispatch(request, *args, **kwargs)
 
         return HttpResponse('Unauthorized', status=401)
 
     def get(self, request):
+        if not getattr(request, 'authenticate', False):
+            return HttpResponse('Unauthorized', status=401)
+
         repository = WeatherRepository(collectionName='weathers')
         try:
             weathers = list(repository.getAll())
             serializer = WeatherSerializer(data=weathers, many=True)
-            if (serializer.is_valid()):
-                # print('Data: ')
-                # print(serializer.data)
+            if serializer.is_valid():
                 modelWeather = serializer.save()
-                objectReturn = {"weathers":modelWeather}
+                objectReturn = {"weathers": modelWeather, "user_id": request.user_id}  # Passa o id do usuário para o contexto do template
             else:
-                # print('Error: ')
-                # print(serializer.errors)
-                objectReturn = {"error":serializer.errors}
+                objectReturn = {"error": serializer.errors, "user_id": request.user_id}  # Passa o id do usuário para o contexto do template
         except WeatherException as e:
-            objectReturn = {"error":e.message}
+            objectReturn = {"error": e.message, "user_id": request.user_id}  # Passa o id do usuário para o contexto do template
 
-        if not self.authenticate:
-            objectReturn["errorAuth"] = "Usuário não autenticado"
-
-        # print(objectReturn)
-  
         return render(request, "home_weather.html", objectReturn)
-    
 
 class WeatherGenerate(View):
 
@@ -81,16 +74,19 @@ class WeatherInsert(View):
 
     def get(self, request):
         weatherForm = WeatherForm()
-
-        return render(request, "create_weather.html", {"form":weatherForm})
+        return render(request, "create_weather.html", {"form": weatherForm})
     
     def post(self, request):
         weatherForm = WeatherForm(request.POST)
         if weatherForm.is_valid():
-            serializer = WeatherSerializer(data=weatherForm.data)
-            if (serializer.is_valid()):
+            weather_data = weatherForm.cleaned_data
+            weather_data['date'] = timezone.now()
+
+            serializer = WeatherSerializer(data=weather_data)
+            if serializer.is_valid():
                 repository = WeatherRepository(collectionName='weathers')
                 repository.insert(serializer.data)
+                return redirect('Weather View')
             else:
                 print(serializer.errors)
         else:
@@ -104,18 +100,38 @@ class WeatherEdit(View):
     def get(self, request, id):
         repository = WeatherRepository(collectionName='weathers')
         weather = repository.getByID(id)
-        weatherForm = WeatherForm(initial=weather)
+        initial_data = {
+            'temperature': weather['temperature'],
+            'city': weather['city'],
+            'atmosphericPressure': weather.get('atmosphericPressure', 0),
+            'humidity': weather.get('humidity', 0),
+            'weather': weather.get('weather', ''),
+            'date': weather['date']  # Adiciona a data do objeto ao formulário
+        }
+        weatherForm = WeatherForm(initial=initial_data)
 
-        return render(request, "form_edit.html", {"form":weatherForm, "id":id})
+        return render(request, "form_edit_weather.html", {"form": weatherForm, "id": id})
     
     def post(self, request, id):
-        weatherForm = WeatherForm(request.POST)
+        repository = WeatherRepository(collectionName='weathers')
+        weather = repository.getByID(id)
+        weatherForm = WeatherForm(request.POST, initial=weather)
+
         if weatherForm.is_valid():
-            serializer = WeatherSerializer(data=weatherForm.data)
-            serializer.id = id
-            if (serializer.is_valid()):
-                repository = WeatherRepository(collectionName='weathers')
+            weather_data = {
+                'temperature': weatherForm.cleaned_data['temperature'],
+                'city': weatherForm.cleaned_data['city'],
+                'atmosphericPressure': weatherForm.cleaned_data.get('atmosphericPressure', 0),
+                'humidity': weatherForm.cleaned_data.get('humidity', 0),
+                'weather': weatherForm.cleaned_data.get('weather', ''),
+            }
+            # Adiciona a data apenas se não estiver presente nos dados do formulário
+            if 'date' not in request.POST:
+                weather_data['date'] = timezone.now()
+            serializer = WeatherSerializer(data=weather_data)
+            if serializer.is_valid():
                 repository.update(serializer.data, id)
+                return redirect('Weather View')
             else:
                 print(serializer.errors)
         else:
