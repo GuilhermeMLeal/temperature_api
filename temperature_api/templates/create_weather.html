@@ -8,7 +8,7 @@
 <body>
     <div class="container">
         <h2>Insert Weather</h2>
-        <form method="post" action="{% url 'Weather Insert' %}">
+        <form method="post" action="{% url 'Weather Insert' user_id=user_id %}">
             {% csrf_token %}
             <input type="number" name="temperature" placeholder="Temperature" value="{{ form.temperature.value }}" required /><br>
             <input type="text" name="city" placeholder="City" value="{{ form.city.value }}" required /><br>

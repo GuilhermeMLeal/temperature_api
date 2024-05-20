@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h2>Edit Weather</h2>
-        <form method="post">
+        <form method="post" action="{% url 'Weather Edit' user_id=user_id %}">
             {% csrf_token %}
             <input type="hidden" name="date" value="{{ form.date.value }}">
             <input type="number" name="temperature" placeholder="Temperature" value="{{ form.temperature.value }}" required /><br>
