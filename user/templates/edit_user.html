@@ -5,11 +5,12 @@
 </head>
 <body>
     <h1>Edit User</h1>
-    <h2>Delete User</h2>
-    <form action="{% url 'User Delete' %}" method="DELETE">
+    <form method="post" action="{% url 'User Delete' user_id=user_id %}">
+        {% csrf_token %}
         <button type="submit">Delete</button>
-      </form>
-    <form method="post" action="{% url 'User Edit' %}">
+    </form>    
+        
+      <form method="post" action="{% url 'User Edit' user_id=user_id %}">
         {% csrf_token %}
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username" value="{{ user.username }}"><br><br>
