@@ -80,17 +80,15 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.dummy',
-        
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-
-MONGO_CONNECTION_STRING = 'mongodb://10.109.2.63:443/'
-MONGO_DATABASE_NAME = 'weather_andresouza'
+MONGO_CONNECTION_STRING = 'mongodb://localhost:27017/'
+MONGO_DATABASE_NAME = 'weather_martins'
 
 
 # Password validation
