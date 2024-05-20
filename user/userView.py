@@ -1,17 +1,20 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .authenticationUser import *
-from django.http.response import HttpResponse
-from .userRepository import *
+from .authenticationUser import authenticate, generateToken
+from django.http import HttpResponse
+from .userRepository import UserRepository
 
 # Create your views here.
 class UserToken(View):
     def get(self, request):
-        user = authenticate(username='user', password='a1b2c3')
+        username = request.GET.get('username')
+        password = request.GET.get('password')
+        user = authenticate(username=username, password=password)
+        
         if user:
             return HttpResponse(generateToken(user))
         return HttpResponse('User not authenticated')
-    
+        
 class UserLogin(View):
     def get(self, request):
         return render(request, 'authentificationUser.html')
@@ -20,10 +23,11 @@ class UserLogin(View):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username, password)
+        
         if user:
             token = generateToken(user)
             request.session['token'] = token  # Armazena o token na sessão
-            return redirect('Weather View')
+            return redirect('Weather View',user_id=user.id)
         return HttpResponse('User not authenticated')
 
 class UserInsert(View):
@@ -51,18 +55,19 @@ class UserInsert(View):
         })
         return redirect('User Login')
 
-class userForget(View):
+class UserForget(View):
     def get(self, request):
         return render(request, 'forgot_password.html')
 
 class UserEdit(View):
     def get(self, request, user_id):
         user_repo = UserRepository('users')
-        user = user_repo.get_by_id(user_id)
+        user = user_repo.getByID(user_id)
         if not user:
             return HttpResponse('User not found', status=404)
         
-        return render(request, 'edit_user.html', {'user': user})
+        return render(request, 'edit_user.html', {'user': user, 'user_id': user_id})
+
 
     def post(self, request, user_id):
         username = request.POST.get('username')
@@ -70,23 +75,28 @@ class UserEdit(View):
         email = request.POST.get('email')
         
         user_repo = UserRepository('users')
-        user = user_repo.get_by_id(user_id)
+        user = user_repo.getByID(user_id)
         if not user:
             return HttpResponse('User not found', status=404)
         
-        user_repo.update(user_id, {
+        user_repo.update({
             'username': username,
             'password': password,
             'email': email
-        })
+        }, user_id)
         return redirect('User Login')
 
 class UserDelete(View):
     def get(self, request, user_id):
         user_repo = UserRepository('users')
-        user = user_repo.get_by_id(user_id)
+        user = user_repo.getByID(user_id)
         if not user:
             return HttpResponse('User not found', status=404)
         
-        user_repo.delete(user_id)
+        return render(request, 'confirm_delete_user.html', {'user': user})
+
+    def post(self, request, user_id):
+        user_repo = UserRepository('users')
+        user_repo.deleteByID(user_id)
         return HttpResponse('User deleted successfully')
+
