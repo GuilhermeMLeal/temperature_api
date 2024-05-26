@@ -66,11 +66,11 @@
 <body>
     <div class="container">
         <h2>CRIE UMA PREVISÃO</h2>
-        <form method="post" action="{% url 'Weather Insert' user_id=user_id %}">
+        <form method="post" action="{% url 'Weather Insert'%}">
             {% csrf_token %}
             <input type="number" name="temperature" placeholder="TEMPERATURA" value="{{ form.temperature.value }}" required /><br>
             <input type="text" name="city" placeholder="CIDADE" value="{{ form.city.value }}" required /><br>
-            <input type="number" name="PRESSÃO ATMOSFÉRICA" placeholder="Atmospheric Pressure" value="{{ form.atmosphericPressure.value }}" required /><br>
+            <input type="number" name="atmosphericPressure" placeholder="PRESSÃO ATMOSFÉRICA" value="{{ form.atmosphericPressure.value }}" required /><br>
             <input type="number" name="humidity" placeholder="HUMIDADE" value="{{ form.humidity.value }}" required /><br>
             <input type="text" name="weather" placeholder="CONDIÇÃO CLIMÁTICA" value="{{ form.weather.value }}" /><br>
             <input type="submit" value="Submit" />
