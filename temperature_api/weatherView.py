@@ -10,27 +10,34 @@ from user.authenticationUser import *
 from .weatherModel import WeatherEntity
 from .weatherRepository import WeatherRepository
 from .weatherSerializer import WeatherSerializer
-from .weatherForm import WeatherForm
+from .WeatherForm import WeatherForm
 from .weatherExceptions import WeatherException
+from django.forms.models import model_to_dict
+
 
 class WeatherView(View):
-    def dispatch(self, request, *args, **kwargs):
-        if 'token' in request.session:
-            token = request.session['token']
-            error_code, _ = verifyToken(token)
-            if error_code == 0:
-                user = getAuthenticatedUser(token)
-                if user:
-                    request.authenticate = True
-                    request.user_id = user.id
-                    kwargs['user_id'] = user.id
-                    return super().dispatch(request, *args, **kwargs)
+    def verify_authenticated(self, request):
+        token = request.COOKIES.get('jwt')
+        if not token:
+            return False
+        try:
+            user = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            request.user_id = user.get('id')
+            return True
+        except jwt.ExpiredSignatureError:
+            return False
+        except jwt.InvalidTokenError:
+            return False
 
-        return HttpResponse('Unauthorized', status=401)
+    def dispatch(self, request, *args, **kwargs):
+        request.authenticate = self.verify_authenticated(request)
+        if not request.authenticate:
+            return HttpResponse('Unauthorized - No token provided', status=401)
+        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        if not getattr(request, 'authenticate', False):
-            return HttpResponse('Unauthorized', status=401)
+        if not request.authenticate:
+            return HttpResponse('Unauthorized - User not authenticated', status=401)
 
         repository = WeatherRepository(collectionName='weathers')
         try:
@@ -49,7 +56,7 @@ class WeatherView(View):
 
 class WeatherGenerate(View):
 
-    def get(self, request, user_id):
+    def get(self, request):
         repository = WeatherRepository(collectionName='weathers')
         weather = WeatherEntity(
             temperature=randrange(start=17, stop=40),
@@ -62,99 +69,87 @@ class WeatherGenerate(View):
         else:
             print(serializer.errors)
 
-        return redirect('Weather View', user_id=user_id)
+        return redirect('Weather View')
 
     
 class WeatherReset(View):
 
-    def get(self, request, user_id):
+    def get(self, request):
         repository = WeatherRepository(collectionName='weathers')
         repository.deleteAll()
 
-        return redirect('Weather View', user_id=user_id)
+        return redirect('Weather View')
     
 
 class WeatherInsert(View):
 
-    def get(self, request, user_id):
+    def get(self, request):
         weatherForm = WeatherForm()
-        return render(request, "create_weather.html", {"form": weatherForm, "user_id": user_id})
+        return render(request, "create_weather.html", {"form": weatherForm})
 
-    def post(self, request, user_id):
+    def post(self, request):
         weatherForm = WeatherForm(request.POST)
         if weatherForm.is_valid():
             weather_data = weatherForm.cleaned_data
-            weather_data['date'] = timezone.now()
+            weather_data['date'] = datetime.now()
 
             serializer = WeatherSerializer(data=weather_data)
             if serializer.is_valid():
                 repository = WeatherRepository(collectionName='weathers')
                 repository.insert(serializer.data)
-                return redirect('Weather View', user_id=user_id)
+                return redirect('Weather View')
             else:
                 print(serializer.errors)
         else:
             print(weatherForm.errors)
 
-        return redirect('Weather View', user_id=user_id)
-
-    
+        return redirect('Weather View')
 
 class WeatherEdit(View):
 
-    def get(self, request, id, user_id):
+    def get(self, request, id):
+        repository = WeatherRepository(collectionName='weathers')
+        weather_data = repository.getByID(id)
+        weather_entity = WeatherEntity(**weather_data) if weather_data else None
+        weather_dict = weather_entity.to_dict() if weather_entity else {}
+        weatherForm = WeatherForm(initial=weather_dict)
+
+        return render(request, "form_edit_weather.html", {"form": weatherForm, "id": id})
+
+
+    def post(self, request, id):
         repository = WeatherRepository(collectionName='weathers')
         weather = repository.getByID(id)
-        initial_data = {
-            'temperature': weather['temperature'],
-            'city': weather['city'],
-            'atmosphericPressure': weather.get('atmosphericPressure', 0),
-            'humidity': weather.get('humidity', 0),
-            'weather': weather.get('weather', ''),
-            'date': weather['date']
-        }
-        weatherForm = WeatherForm(initial=initial_data)
+        temperature = request.POST.get('temperature', weather['temperature'])
+        city = request.POST.get('city', weather['city'])
+        atmosphericPressure = request.POST.get('atmosphericPressure', weather.get('atmosphericPressure', 0))
+        humidity = request.POST.get('humidity', weather.get('humidity', 0))
+        weather_condition = request.POST.get('weather', weather.get('weather', ''))
 
-        return render(request, "form_edit_weather.html", {"form": weatherForm, "id": id, "user_id": user_id})
+        # Atualize os dados no banco de dados
+        repository.update({
+            'temperature': temperature,
+            'city': city,
+            'atmosphericPressure': atmosphericPressure,
+            'humidity': humidity,
+            'weather': weather_condition,
+        }, id)
 
-    def post(self, request, id, user_id):
-        repository = WeatherRepository(collectionName='weathers')
-        weather = repository.getByID(id)
-        weatherForm = WeatherForm(request.POST, initial=weather)
-
-        if weatherForm.is_valid():
-            weather_data = {
-                'temperature': weatherForm.cleaned_data['temperature'],
-                'city': weatherForm.cleaned_data['city'],
-                'atmosphericPressure': weatherForm.cleaned_data.get('atmosphericPressure', 0),
-                'humidity': weatherForm.cleaned_data.get('humidity', 0),
-                'weather': weatherForm.cleaned_data.get('weather', ''),
-            }
-            if 'date' not in request.POST:
-                weather_data['date'] = timezone.now()
-            serializer = WeatherSerializer(data=weather_data)
-            if serializer.is_valid():
-                repository.update(serializer.data, id)
-                return redirect('Weather View', user_id=user_id)
-            else:
-                print(serializer.errors)
-        else:
-            print(weatherForm.errors)
-
-        return redirect('Weather View', user_id=user_id)
+        # Redirecione para a página de visualização de dados meteorológicos
+        return redirect('Weather View')
 
 
 class WeatherDelete(View):
     
-    def get(self, request, id, user_id):
+    def get(self, request, id):
         repository = WeatherRepository(collectionName='weathers')
         repository.deleteByID(id)
 
-        return redirect('Weather View', user_id=user_id)
+        return redirect('Weather View')
 
 
 class WeatherFilter(View):
-    def post(self, request, user_id):
+    def post(self, request):
         data = request.POST.dict()
         data.pop('csrfmiddlewaretoken')
 
@@ -164,10 +159,10 @@ class WeatherFilter(View):
             serializer = WeatherSerializer(data=weathers, many=True)
             if (serializer.is_valid()):
                 modelWeather = serializer.save()
-                objectReturn = {"weathers":modelWeather}
+                objectReturn = {"weathers": modelWeather}
             else:
-                objectReturn = {"error":serializer.errors}
+                objectReturn = {"error": serializer.errors}
         except WeatherException as e:
-            objectReturn = {"error":e.message}
+            objectReturn = {"error": e.message}
   
         return render(request, "home_weather.html", objectReturn)
