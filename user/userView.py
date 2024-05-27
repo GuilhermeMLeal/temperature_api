@@ -23,10 +23,10 @@ class UserLogin(View):
         return HttpResponse('User not authenticated')
 
 class UserLogout(View):
-    def get(self, request):
-        response = redirect('Weather View')
+    def post(self, request):
+        response = redirect('User Login')
         response.delete_cookie('jwt')
-        response.delete_cookie('user_id')  # Deleta o cookie 'user_id'
+        response.delete_cookie('user_id')
         return response
 
 

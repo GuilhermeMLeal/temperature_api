@@ -29,6 +29,7 @@ urlpatterns = [
     path('weather/generate/', WeatherGenerate.as_view(), name='Weather Generate'),
     path('weather/reset/', WeatherReset.as_view(), name='Weather Reset'),
     path('', UserLogin.as_view(), name='User Login'),
+    path('logout/', UserLogout.as_view(), name='User Logout'),
     path('user/insert/', UserInsert.as_view(), name='User Insert'),
     path('user/forget/', UserForget.as_view(), name="User Forget"),
     path('user/edit/<str:user_id>/', UserEdit.as_view(), name='User Edit'),
