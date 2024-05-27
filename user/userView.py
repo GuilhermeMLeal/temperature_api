@@ -18,6 +18,7 @@ class UserLogin(View):
             token = generateToken(user)
             response = redirect('Weather View')
             response.set_cookie('jwt', token)  # Armazena o token no cookie 'jwt'
+            response.set_cookie('user_id', user.id)  # Armazena o ID do usuário no cookie 'user_id'
             return response
         return HttpResponse('User not authenticated')
 
@@ -25,7 +26,9 @@ class UserLogout(View):
     def get(self, request):
         response = redirect('Weather View')
         response.delete_cookie('jwt')
+        response.delete_cookie('user_id')  # Deleta o cookie 'user_id'
         return response
+
 
 class UserInsert(View):
     def get(self, request):
@@ -58,7 +61,6 @@ class UserInsert(View):
             'email': email
         })
         return redirect('User Login')
-
 
 class UserEdit(View):
     def get(self, request, user_id):
@@ -102,6 +104,7 @@ class UserDelete(View):
         user_repo = UserRepository('users')
         user_repo.deleteByID(user_id)
         return HttpResponse('User deleted successfully')
+
 
 class UserForget(View):
     def get(self, request):
