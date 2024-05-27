@@ -101,9 +101,10 @@ class UserDelete(View):
         return render(request, 'confirm_delete_user.html', {'user': user})
 
     def post(self, request, user_id):
+        response = redirect('User Login')
         user_repo = UserRepository('users')
         user_repo.deleteByID(user_id)
-        return HttpResponse('User deleted successfully')
+        return response
 
 
 class UserForget(View):
