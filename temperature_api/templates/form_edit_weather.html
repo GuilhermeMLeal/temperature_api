@@ -65,7 +65,7 @@
             {% csrf_token %}
             <div>
                 <label for="temperature">TEMPERATURA:</label>
-                <input type="number" name="temperature" placeholder="TEMPERATURA" value="{{ form.temperature.value }}" required /><br>
+                <input type="number" name="temperature" placeholder="TEMPERATURA" value="{{ form.temperature.value }}" step="0.01" required /><br>
             </div>
             <div>
                 <label for="city">CIDADE:</label>
@@ -73,11 +73,11 @@
             </div>
             <div>
                 <label for="atmosphericPressure">PRESSÃO ATMOSFÉRICA:</label>
-                <input type="number" name="atmosphericPressure" placeholder="PRESSÃO ATMOSFÉRICA" value="{{ form.atmosphericPressure.value }}" required /><br>
+                <input type="number" name="atmosphericPressure" placeholder="PRESSÃO ATMOSFÉRICA" value="{{ form.atmosphericPressure.value }}" step="0.01" required /><br>
             </div>
             <div>
                 <label for="humidity">HUMIDADE:</label>
-                <input type="number" name="humidity" placeholder="HUMIDADE" value="{{ form.humidity.value }}" required /><br>
+                <input type="number" name="humidity" placeholder="HUMIDADE" value="{{ form.humidity.value }}" step="0.01" required /><br>
             </div>
             <div>
                 <label for="weather">CONDIÇÃO CLIMÁTICA:</label>
