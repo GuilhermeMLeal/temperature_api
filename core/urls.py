@@ -21,17 +21,16 @@ from user.userView import *
 from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
-    path('weather/<str:user_id>/', WeatherView.as_view(), name='Weather View'),
-    path('weather/insert/<str:user_id>/', WeatherInsert.as_view(), name='Weather Insert'),
-    path('weather/filter/<str:user_id>/', WeatherFilter.as_view(), name='Weather Filter'),
-    path('weather/edit/<id>/<str:user_id>/', WeatherEdit.as_view(), name='Weather Edit'),
-    path('weather/delete/<id>/<str:user_id>/', WeatherDelete.as_view(), name='Weather Delete'),
-    path('weather/generate/<str:user_id>/', WeatherGenerate.as_view(), name='Weather Generate'),
-    path('weather/reset/<str:user_id>/', WeatherReset.as_view(), name='Weather Reset'),
-    path('user/token', UserToken.as_view(), name='User Token'),
+    path('weather/', WeatherView.as_view(), name='Weather View'),
+    path('weather/insert/', WeatherInsert.as_view(), name='Weather Insert'),
+    path('weather/filter/', WeatherFilter.as_view(), name='Weather Filter'),
+    path('weather/edit/<id>/', WeatherEdit.as_view(), name='Weather Edit'),
+    path('weather/delete/<id>/', WeatherDelete.as_view(), name='Weather Delete'),
+    path('weather/generate/', WeatherGenerate.as_view(), name='Weather Generate'),
+    path('weather/reset/', WeatherReset.as_view(), name='Weather Reset'),
     path('', UserLogin.as_view(), name='User Login'),
-    path('user/insert', UserInsert.as_view(), name='User Insert'),
-    path('user/forget', UserForget.as_view(), name="User Forget"),
+    path('user/insert/', UserInsert.as_view(), name='User Insert'),
+    path('user/forget/', UserForget.as_view(), name="User Forget"),
     path('user/edit/<str:user_id>/', UserEdit.as_view(), name='User Edit'),
     path('user/delete/<str:user_id>/', UserDelete.as_view(), name='User Delete'),
 ]

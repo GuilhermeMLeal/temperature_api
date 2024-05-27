@@ -1,116 +1,166 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Weather Data</title>
     <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}" />
-  </head>
-  <style>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
+        font-family: 'Roboto', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
 
     .container {
-      max-width: 800px;
-      margin: 20px auto;
-      padding: 0 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+        width: 100%;
+        max-width: 800px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
     }
 
     h1 {
-      text-align: center;
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 20px;
     }
 
     table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      background-color: #fff;
+        width: 100%;
+        border-collapse: collapse;
+        
     }
 
     table th,
     table td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
+        border: 1px solid #ddd;
+        padding: 5px;
+        text-align: center;
     }
 
     table th {
-      background-color: #f2f2f2;
+        background-color: #007bff;
+        color: #fff;
     }
 
     table tr:nth-child(even) {
-      background-color: #f9f9f9;
+        background-color: #f9f9f9;
     }
 
     table tr:hover {
-      background-color: #f1f1f1;
+        background-color: #f1f1f1;
     }
 
-    /* Estilo para o botão */
-    button[type="submit"] {
-      padding: 10px 20px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 14px;
-      text-transform: uppercase;
-      margin-top: 20px; /* Adiciona margem acima do botão */
+    table tr td a {
+        text-decoration: none;
+        color: #007bff;
     }
 
-    button[type="submit"]:hover {
-      background-color: #0056b3;
+    table tr td a:hover {
+        text-decoration: underline;
     }
-  </style>
-  <body>
+
+    #create {
+        margin-top: 20px;
+    }
+
+    button[type="submit"],
+    .create-btn {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 14px;
+        text-transform: uppercase;
+        margin: 10px 0;
+        display: inline-block;
+    }
+
+    button[type="submit"]:hover,
+    .create-btn:hover {
+        background-color: #218838;
+    }
+
+    .reset-btn {
+        background-color: #dc3545;
+    }
+
+    .reset-btn:hover {
+        background-color: #c82333;
+    }
+
+    .user-edit {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    .user-edit:hover {
+        background-color: #0056b3;
+    }
+    </style>
+</head>
+<body>
     <div class="container">
-      <h1>Weather Data</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Temperature</th>
-            <th>City</th>
-            <th>Atmospheric Pressure</th>
-            <th>Humidity</th>
-            <th>Weather</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for weather in weathers %}
-          <tr>
-              <td>{{ weather.temperature }}</td>
-              <td>{{ weather.city }}</td>
-              <td>{{ weather.atmosphericPressure }}</td>
-              <td>{{ weather.humidity }}</td>
-              <td>{{ weather.weather }}</td>
-              <td>{{ weather.date }}</td>
-              <td><a href="{% url 'Weather Edit' id=weather.id user_id=user_id %}">Editar</a></td>
-              <td><a href="{% url 'Weather Delete' id=weather.id user_id=user_id %}">Remover</a></td>              
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+        <h1>CONDIÇÕES CLIMÁTICAS EM CIDADES</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>TEMPERATURA</th>
+                    <th>CIDADE</th>
+                    <th>PRESSÃO ATMOSFÉRICA</th>
+                    <th>HUMIDADE</th>
+                    <th>CONDIÇÃO CLIMÁTICA</th>
+                    <th>DATA</th>
+                    <th>EDIÇÃO</th>
+                    <th>DELEÇÃO</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for weather in weathers %}
+                <tr>
+                    <td>{{ weather.temperature }}</td>
+                    <td>{{ weather.city }}</td>
+                    <td>{{ weather.atmosphericPressure }}</td>
+                    <td>{{ weather.humidity }}</td>
+                    <td>{{ weather.weather }}</td>
+                    <td>{{ weather.date }}</td>
+                    <td><a href="{% url 'Weather Edit' id=weather.id %}">EDITAR</a></td>
+                    <td><a href="{% url 'Weather Delete' id=weather.id %}">DELETAR</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-      <div id="create">
-        <form action="{% url 'Weather Insert' user_id=user_id %}" method="GET">
-          <button type="submit">CRIAR UMA PREVISÃO</button>
-        </form>
-        <form action="{% url 'Weather Reset' user_id=user_id %}" method="DELETE">
-          <button type="submit">RESETE AS PREVISÕES</button>
-        </form>
-        <a href="{% url 'User Edit' user_id=user_id %}">Editar Usuário</a>
-
-
-      </div>
+        <div id="create">
+            <form action="{% url 'Weather Insert'%}" method="GET">
+                <button type="submit" class="create-btn">CRIAR TEMPERATURA</button>
+            </form>
+            <form action="{% url 'Weather Reset'%}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="reset-btn">RESETAR TEMPERATURAS</button>
+            </form>
+            <a href="{% url 'User Edit' user_id=request.COOKIES.user_id %}" class="user-edit">EDITAR USUÁRIO</a>
+        </div>
     </div>
-  </body>
+</body>
 </html>

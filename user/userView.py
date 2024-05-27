@@ -1,20 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .authenticationUser import authenticate, generateToken
 from django.http import HttpResponse
+from .authenticationUser import authenticate, generateToken
 from .userRepository import UserRepository
+import bcrypt
 
-# Create your views here.
-class UserToken(View):
-    def get(self, request):
-        username = request.GET.get('username')
-        password = request.GET.get('password')
-        user = authenticate(username=username, password=password)
-        
-        if user:
-            return HttpResponse(generateToken(user))
-        return HttpResponse('User not authenticated')
-        
 class UserLogin(View):
     def get(self, request):
         return render(request, 'authentificationUser.html')
@@ -22,13 +12,23 @@ class UserLogin(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(username, password)
-        
+        user = authenticate(username=username, password=password)
+
         if user:
             token = generateToken(user)
-            request.session['token'] = token  # Armazena o token na sessão
-            return redirect('Weather View',user_id=user.id)
+            response = redirect('Weather View')
+            response.set_cookie('jwt', token)  # Armazena o token no cookie 'jwt'
+            response.set_cookie('user_id', user.id)  # Armazena o ID do usuário no cookie 'user_id'
+            return response
         return HttpResponse('User not authenticated')
+
+class UserLogout(View):
+    def get(self, request):
+        response = redirect('Weather View')
+        response.delete_cookie('jwt')
+        response.delete_cookie('user_id')  # Deleta o cookie 'user_id'
+        return response
+
 
 class UserInsert(View):
     def get(self, request):
@@ -37,27 +37,30 @@ class UserInsert(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
         email = request.POST.get('email')
         
-        user_repo = UserRepository('users')  # 'users' é o nome da coleção no MongoDB
+        if password != confirm_password:
+            return render(request, 'create_user.html', {'error_message': 'Passwords do not match.'})
         
-        # Verifica se o username já está em uso
+        user_repo = UserRepository('users')
+        
         filter = {'username': username}
         existing_user = user_repo.get(filter)
         if existing_user:
             return render(request, 'create_user.html', {'error_message': 'Username already exists. Please choose a different one.'})
         
-        # Cria o novo usuário
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        
+        # Log para depuração
+        print(f"Hashed password: {hashed_password}")
+        
         user_repo.insert({
             'username': username,
-            'password': password,
+            'password': hashed_password,
             'email': email
         })
         return redirect('User Login')
-
-class UserForget(View):
-    def get(self, request):
-        return render(request, 'forgot_password.html')
 
 class UserEdit(View):
     def get(self, request, user_id):
@@ -67,7 +70,6 @@ class UserEdit(View):
             return HttpResponse('User not found', status=404)
         
         return render(request, 'edit_user.html', {'user': user, 'user_id': user_id})
-
 
     def post(self, request, user_id):
         username = request.POST.get('username')
@@ -79,9 +81,12 @@ class UserEdit(View):
         if not user:
             return HttpResponse('User not found', status=404)
         
+        # Hash da senha
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        
         user_repo.update({
             'username': username,
-            'password': password,
+            'password': hashed_password,
             'email': email
         }, user_id)
         return redirect('User Login')
@@ -100,3 +105,8 @@ class UserDelete(View):
         user_repo.deleteByID(user_id)
         return HttpResponse('User deleted successfully')
 
+
+class UserForget(View):
+    def get(self, request):
+        return render(request, 'forgot_password.html')
+        
