@@ -5,7 +5,7 @@ from random import randrange
 from django.http import HttpRequest
 from django.http.response import HttpResponse as HttpResponse
 from django.views import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,reverse
 from user.authenticationUser import *
 from .weatherModel import WeatherEntity
 from .weatherRepository import WeatherRepository
@@ -28,17 +28,15 @@ class WeatherView(View):
             return False
         except jwt.InvalidTokenError:
             return False
+        except Exception as e:
+            return False
 
     def dispatch(self, request, *args, **kwargs):
-        request.authenticate = self.verify_authenticated(request)
-        if not request.authenticate:
-            return HttpResponse('Unauthorized - No token provided', status=401)
+        if not self.verify_authenticated(request):
+            return redirect(reverse('User Login'))
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        if not request.authenticate:
-            return HttpResponse('Unauthorized - User not authenticated', status=401)
-
         repository = WeatherRepository(collectionName='weathers')
         try:
             weathers = list(repository.getAll())
@@ -79,7 +77,12 @@ class WeatherReset(View):
         repository.deleteAll()
 
         return redirect('Weather View')
-    
+
+    def post(self, request):
+        repository = WeatherRepository(collectionName='weathers')
+        repository.deleteAll()
+
+        return redirect('Weather View')
 
 class WeatherInsert(View):
 
@@ -116,7 +119,6 @@ class WeatherEdit(View):
 
         return render(request, "form_edit_weather.html", {"form": weatherForm, "id": id})
 
-
     def post(self, request, id):
         repository = WeatherRepository(collectionName='weathers')
         weather = repository.getByID(id)
@@ -126,7 +128,6 @@ class WeatherEdit(View):
         humidity = request.POST.get('humidity', weather.get('humidity', 0))
         weather_condition = request.POST.get('weather', weather.get('weather', ''))
 
-        # Atualize os dados no banco de dados
         repository.update({
             'temperature': temperature,
             'city': city,
@@ -134,8 +135,6 @@ class WeatherEdit(View):
             'humidity': humidity,
             'weather': weather_condition,
         }, id)
-
-        # Redirecione para a página de visualização de dados meteorológicos
         return redirect('Weather View')
 
 
