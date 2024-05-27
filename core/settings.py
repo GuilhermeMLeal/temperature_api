@@ -87,9 +87,9 @@ DATABASES = {
     }
 }
 
-MONGO_CONNECTION_STRING = 'mongodb://localhost:27017/'
-MONGO_DATABASE_NAME = 'weather_martins'
-
+# Troque pela conexão do seu banco de dados MongoDB
+#MONGO_CONNECTION_STRING = 'mongodb://localhost:27017/'
+#MONGO_DATABASE_NAME = 'weather_martins'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
