@@ -16,19 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from temperature_api.views.weather_view import WeatherView
+from temperature_api.weatherView import *
+from user.userView import *
 from rest_framework.routers import DefaultRouter
 
-
-
-from django.urls import path
-from temperature_api.views.weather_view import WeatherView, WeatherGenerate, WeatherReset,WeatherInsert, WeatherEdit
-
 urlpatterns = [
-    path('api/', WeatherView.as_view(), name='Weather View'),
-    path('api/insert/', WeatherInsert.as_view(), name='Weather Insert'),
-    path('api/generate/', WeatherGenerate.as_view(), name='Weather Generate'),
-    path('api/reset/', WeatherReset.as_view(), name='Weather Reset'),
-    path('api/update/<id>', WeatherEdit.as_view(), name ='Weather Edit' )
-    
+    path('weather/', WeatherView.as_view(), name='Weather View'),
+    path('weather/insert/', WeatherInsert.as_view(), name='Weather Insert'),
+    path('weather/filter/', WeatherFilter.as_view(), name='Weather Filter'),
+    path('weather/edit/<id>/', WeatherEdit.as_view(), name='Weather Edit'),
+    path('weather/delete/<id>/', WeatherDelete.as_view(), name='Weather Delete'),
+    path('weather/generate/', WeatherGenerate.as_view(), name='Weather Generate'),
+    path('weather/reset/', WeatherReset.as_view(), name='Weather Reset'),
+    path('', UserLogin.as_view(), name='User Login'),
+    path('logout/', UserLogout.as_view(), name='User Logout'),
+    path('user/insert/', UserInsert.as_view(), name='User Insert'),
+    path('user/forget/', UserForget.as_view(), name="User Forget"),
+    path('user/edit/<str:user_id>/', UserEdit.as_view(), name='User Edit'),
+    path('user/delete/<str:user_id>/', UserDelete.as_view(), name='User Delete'),
 ]

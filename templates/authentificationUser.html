@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Time</title>
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px 40px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    text-align: center;
+    /* Centraliza vertical e horizontalmente */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+h1 {
+    color: #333;
+}
+
+h2 {
+    color: #666;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+input[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+a {
+    display: block;
+    margin-top: 10px;
+    color: #007BFF;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+</style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Weather Time</h1>
+        <h2>Saiba do tempo, antes dele chegar até você</h2>
+        
+        {% block content %}
+        <form method="post" action="{% url 'User Login' %}" class="login-form">
+            {% csrf_token %}
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Username" />
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password" />
+            </div>
+            <div>
+                <input type="submit" value="Login" />
+            </div>
+        </form>
+        
+        <a href="{% url 'User Insert' %}">Crie uma conta</a>
+        <a href="{% url 'User Forget' %}">Esqueci minha senha</a>
+        {% endblock content %}
+    </div>
+</body>
+</html>
