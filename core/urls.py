@@ -31,6 +31,6 @@ urlpatterns = [
     path('', UserLogin.as_view(), name='User Login'),
     path('user/insert/', UserInsert.as_view(), name='User Insert'),
     path('user/forget/', UserForget.as_view(), name="User Forget"),
-    path('user/edit/<user_id>/', UserEdit.as_view(), name='User Edit'),
-    path('user/delete/<user_id>/', UserDelete.as_view(), name='User Delete'),
+    path('user/edit/<str:user_id>/', UserEdit.as_view(), name='User Edit'),
+    path('user/delete/<str:user_id>/', UserDelete.as_view(), name='User Delete'),
 ]
